@@ -1,0 +1,96 @@
+const jwt = require('jsonwebtoken')
+const appointmentRouter = require('express').Router();
+const Appointment = require('../models/Appointment')
+const adminAppointment = require('../models/AdminAppointment')
+const User = require('../models/User');
+const AdminAppointment = require('../models/AdminAppointment');
+
+const getTokenFrom = request => {
+    const authorization = request.get('authorization')
+    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+        return authorization.substring(7)
+    }
+    return null
+}
+
+appointmentRouter.get('/', async (request, response) => {
+    const appointments = await Appointment.find({}).populate('user', { firstname: 1, lastname: 1 });
+    response.json(appointments);
+})
+
+appointmentRouter.get('/:year/:month/:day', async (request, response) => {
+    const year = Number(request.params.year);
+    const month = Number(request.params.month);
+    const day = Number(request.params.day);
+    const appointments = await Appointment.find({ year: year, month: month, day: day }).populate('user', { firstname: 1, lastname: 1, phone: 1 });
+    response.json(appointments);
+})
+
+appointmentRouter.get('/day/:day', async (request, response) => {
+    const day = Number(request.params.day);
+    const appointments = await Appointment.find({ day: day }).populate('user', { firstname: 1, lastname: 1, phone: 1 });
+    response.json(appointments);
+})
+
+appointmentRouter.delete('/:id', async (request, response) => {
+    const id = request.params.id;
+    const resp = await Appointment.findByIdAndDelete(id);
+    response.json(resp);
+})
+
+appointmentRouter.post('/', async (request, response, next) => {
+    const body = request.body
+    try {
+        const token = getTokenFrom(request)
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+        const user = await User.findById(decodedToken.id)
+        const isExistClient = await Appointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
+        const isExistAdmin = await AdminAppointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
+        if (isExistClient.length === 0 && isExistAdmin.length === 0) {
+            const appointment = new Appointment({
+                year: body.year,
+                month: body.month,
+                day: body.day,
+                hour: body.hour,
+                user: user._id
+            })
+            const savedAppointment = await appointment.save()
+            user.appointments = user.appointments.concat(savedAppointment._id)
+            await user.save()
+            response.json(savedAppointment)
+        }
+        else {
+            response.status(401).send('התור כבר אינו פנוי')
+        }
+    }
+    catch {
+        response.status(401).send('!נא התחבר מחדש לקביעת התור')
+    }
+})
+
+appointmentRouter.post('/admin', async (request, response) => {
+    const body = request.body
+    try {
+        const token = getTokenFrom(request)
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+        const admin = await Admin.findById(decodedToken.id)
+        const appointment = new Appointment({
+            year: body.year,
+            month: body.month,
+            day: body.day,
+            hour: body.hour,
+            user: admin._id
+        })
+
+        const savedAppointment = await appointment.save()
+        user.appointments = user.appointments.concat(savedAppointment._id)
+        await user.save()
+        response.json(savedAppointment)
+    }
+    catch {
+        response.status(401).json({ error: 'token missing or invalid' })
+    }
+})
+
+
+module.exports = appointmentRouter

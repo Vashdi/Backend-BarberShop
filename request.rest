@@ -1,0 +1,2 @@
+DELETE  http://localhost:3001/closedDays/Thu%20Oct%2021%202021%2000:00:00%20GMT+0300%20(Israel%20Daylight%20Time
+Content-Type: application/json
