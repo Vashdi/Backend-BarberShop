@@ -1,5 +1,6 @@
 const blackListRouter = require('express').Router()
 const BlackList = require('../models/BlackList')
+const jwt = require('jsonwebtoken')
 
 blackListRouter.get('/', async (request, response) => {
     const blackListUsers = await BlackList.find({});
@@ -23,9 +24,7 @@ blackListRouter.post('/', async (request, response) => {
         firstname: body.firstname,
         lastname: body.lastname,
         phone: body.phone,
-        password: body.password
     })
-
     await newBlackListUser.save()
 
     response
@@ -41,9 +40,7 @@ blackListRouter.delete('/:phone', async (request, response) => {
         }
         else {
             const phone = request.params.phone;
-            console.log(phone);
             const resp = await BlackList.findOneAndDelete({ phone: phone });
-            console.log(resp);
             response.json(resp);
         }
     });
