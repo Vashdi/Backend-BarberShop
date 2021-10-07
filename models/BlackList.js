@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const blackListSchema = new mongoose.Schema({
     firstname: String,
     lastname: String,
-    phone: String
+    phone: String,
+    passwordHash: String
 })
 
 blackListSchema.set('toJSON', {

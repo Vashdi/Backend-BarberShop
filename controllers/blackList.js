@@ -22,7 +22,8 @@ blackListRouter.post('/', async (request, response) => {
     const newBlackListUser = new BlackList({
         firstname: body.firstname,
         lastname: body.lastname,
-        phone: body.phone
+        phone: body.phone,
+        password: body.password
     })
 
     await newBlackListUser.save()
@@ -40,7 +41,9 @@ blackListRouter.delete('/:phone', async (request, response) => {
         }
         else {
             const phone = request.params.phone;
+            console.log(phone);
             const resp = await BlackList.findOneAndDelete({ phone: phone });
+            console.log(resp);
             response.json(resp);
         }
     });
