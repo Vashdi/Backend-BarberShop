@@ -14,35 +14,55 @@ const getTokenFrom = request => {
 }
 
 appointmentRouter.get('/', async (request, response) => {
-    const appointments = await Appointment.find({}).populate('user', { firstname: 1, lastname: 1 });
-    response.json(appointments);
+    try {
+        const appointments = await Appointment.find({}).populate('user', { firstname: 1, lastname: 1 });
+        response.json(appointments);
+    } catch {
+        response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
+    }
+
 })
 
 appointmentRouter.get('/:year/:month/:day', async (request, response) => {
-    const year = Number(request.params.year);
-    const month = Number(request.params.month);
-    const day = Number(request.params.day);
-    const appointments = await Appointment.find({ year: year, month: month, day: day }).populate('user', { firstname: 1, lastname: 1, phone: 1 });
-    response.json(appointments);
+    try {
+        const year = Number(request.params.year);
+        const month = Number(request.params.month);
+        const day = Number(request.params.day);
+        const appointments = await Appointment.find({ year: year, month: month, day: day }).populate('user', { firstname: 1, lastname: 1, phone: 1 });
+        response.json(appointments);
+    } catch {
+        response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
+    }
 })
 
 appointmentRouter.get('/day/:day', async (request, response) => {
-    const day = Number(request.params.day);
-    const appointments = await Appointment.find({ day: day }).populate('user', { firstname: 1, lastname: 1, phone: 1 });
-    response.json(appointments);
+    try {
+        const day = Number(request.params.day);
+        const appointments = await Appointment.find({ day: day }).populate('user', { firstname: 1, lastname: 1, phone: 1 });
+        response.json(appointments);
+    } catch {
+        response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
+    }
 })
 
 appointmentRouter.delete('/:id', async (request, response) => {
-    const id = request.params.id;
-    const resp = await Appointment.findByIdAndDelete(id);
-    response.json(resp);
+    try {
+        const token = getTokenFrom(request)
+        const decodedToken = jwt.verify(token, process.env.SECRET, (err) => err ? response.status(401).send('!נא התחבר מחדש למחיקת התור') : null);
+        const id = request.params.id;
+        const resp = await Appointment.findByIdAndDelete(id);
+        response.json(resp);
+    } catch {
+        response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
+    }
+
 })
 
 appointmentRouter.post('/', async (request, response, next) => {
     const body = request.body
     try {
         const token = getTokenFrom(request)
-        const decodedToken = jwt.verify(token, process.env.SECRET)
+        const decodedToken = jwt.verify(token, process.env.SECRET, (err) => err ? response.status(401).send('!נא התחבר מחדש לקביעת התור') : null);
         const user = await User.findById(decodedToken.id)
         const isExistClient = await Appointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
         const isExistAdmin = await AdminAppointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
@@ -64,7 +84,7 @@ appointmentRouter.post('/', async (request, response, next) => {
         }
     }
     catch {
-        response.status(401).send('!נא התחבר מחדש לקביעת התור')
+        response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
     }
 })
 
@@ -72,7 +92,7 @@ appointmentRouter.post('/admin', async (request, response) => {
     const body = request.body
     try {
         const token = getTokenFrom(request)
-        const decodedToken = jwt.verify(token, process.env.SECRET)
+        const decodedToken = jwt.verify(token, process.env.SECRET, (err) => err ? response.status(401).send('!נא התחבר מחדש לקביעת התור') : null)
         const admin = await Admin.findById(decodedToken.id)
         const appointment = new Appointment({
             year: body.year,
@@ -88,7 +108,7 @@ appointmentRouter.post('/admin', async (request, response) => {
         response.json(savedAppointment)
     }
     catch {
-        response.status(401).json({ error: 'token missing or invalid' })
+        response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
     }
 })
 
