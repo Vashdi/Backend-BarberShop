@@ -32,28 +32,4 @@ usersRouter.delete('/:id', async (request, response) => {
   });
 })
 
-usersRouter.post('/', async (request, response) => {
-  try {
-    const body = request.body
-
-    const user = new User({
-      firstname: body.firstname,
-      lastname: body.lastname,
-      phone: body.phone,
-      password: body.password
-    })
-
-    const savedUser = await user.save()
-
-    response
-      .status(200)
-      .send({ phone: body.phone, firstname: body.firstname, lastname: body.lastname })
-  }
-
-  catch (exception) {
-    console.log(exception);
-  }
-})
-
-
 module.exports = usersRouter
