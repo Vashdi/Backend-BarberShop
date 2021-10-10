@@ -7,7 +7,7 @@ registerRouter.post('/', async (request, response) => {
     try {
         const body = request.body
         var reg = new RegExp('^[0-9]+$');
-        var reg2 = new RegExp('^[a-z\u0590-\u05fe]+$');
+        var reg2 = new RegExp('^[a-z\u0590-\u05fe\A-Z]+$');
         const dbUser = await User.findOne({ phone: body.phone })
         if (dbUser) {
             response.status(401).send('מספר הפלאפון כבר קיים במערכת');

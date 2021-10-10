@@ -12,8 +12,6 @@ closedDaysRouter.get('/', async (request, response) => {
 
 closedDaysRouter.delete('/:date', async (request, response) => {
     try {
-        const token = getTokenFrom(request)
-        const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש לקביעת ימי עבודה') : data);
         const date = new Date(request.params.date);
         const ClosedDay = await closedDays.findOneAndDelete({ date: date });
         response.json(ClosedDay)
@@ -25,8 +23,6 @@ closedDaysRouter.delete('/:date', async (request, response) => {
 
 closedDaysRouter.post('/', async (request, response) => {
     try {
-        const token = getTokenFrom(request)
-        const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש לקביעת ימי חופש') : data);
         const body = request.body;
         const newClosedDays = new closedDays({
             date: body.date

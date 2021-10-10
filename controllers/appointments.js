@@ -51,8 +51,36 @@ appointmentRouter.delete('/:id', async (request, response) => {
         const token = getTokenFrom(request)
         const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש למחיקת התור') : data);
         const id = request.params.id;
-        const resp = await Appointment.findByIdAndDelete(id);
-        response.json(resp);
+        const body = await Appointment.findByIdAndDelete(id);
+        const user = await User.findById(body.user)
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.USER,
+                pass: process.env.PASS
+            }
+        });
+
+        let mailOptions = {
+            from: process.env.USER,
+            to: process.env.USER,
+            subject: `✖ בוטל תור ${body.day}/${body.month}/${body.year} - ${body.hour}`,
+            html: `<div>
+            <h4> ${user.firstname} ${user.lastname}</h4>
+            <p>
+            ${user.phone} :פלאפון<br/>
+            ${body.day}/${body.month}/${body.year} :תאריך <br/>
+            ${body.hour} :שעה</p>
+            </div>`,
+        }
+
+        await transporter.sendMail(mailOptions, function (err, data) {
+            if (err)
+                console.log("ERROR");
+            else
+                console.log("EMAIL SENT");
+        })
+        response.json(body);
     } catch {
         response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
     }
@@ -65,48 +93,49 @@ appointmentRouter.post('/', async (request, response, next) => {
         const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש לקביעת התור') : data);
         const user = await User.findById(decodedToken.id)
         const isExistClient = await Appointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
-        const isExistAdmin = await AdminAppointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
-        if (isExistClient.length === 0 && isExistAdmin.length === 0) {
-            const appointment = new Appointment({
-                year: body.year,
-                month: body.month,
-                day: body.day,
-                hour: body.hour,
-                user: user._id
-            })
-            const savedAppointment = await appointment.save()
-            user.appointments = user.appointments.concat(savedAppointment._id)
-            await user.save()
-
-            let transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: process.env.USER,
-                    pass: process.env.PASS
-                }
-            });
-
-            let mailOptions = {
-                from: process.env.USER,
-                to: process.env.USER,
-                subject: `נקבע תור ל ${body.day}/${body.month}/${body.year} - ${body.hour}`,
-                html: `<p>
-                שם: ${user.firstname} ${user.lastname}<br/>
-                ${user.phone} :פלאפון<br/>
-                ${body.day}/${body.month}/${body.year} :תאריך <br/>
-                ${body.hour} :שעה</p>`,
-            }
-
-            transporter.sendMail(mailOptions, function (err, data) {
-                if (err)
-                    console.log("ERROR");
-                else
-                    console.log("EMAIL SENT");
-            })
-            response.json(savedAppointment)
-        }
+        const isExistAppInThatDay = await Appointment.find({ user: user.id, year: body.year, month: body.month, day: body.day });
+        if (isExistAppInThatDay.length !== 0)
+            response.status(401).send('לא ניתן לקבוע תור נוסף לאותו היום')
         else {
-            response.status(401).send('התור כבר אינו פנוי')
+            const isExistAdmin = await AdminAppointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
+            if (isExistClient.length === 0 && isExistAdmin.length === 0) {
+                const appointment = new Appointment({
+                    year: body.year,
+                    month: body.month,
+                    day: body.day,
+                    hour: body.hour,
+                    user: user._id
+                })
+                const savedAppointment = await appointment.save()
+                user.appointments = user.appointments.concat(savedAppointment._id)
+                await user.save()
+                response.json(savedAppointment)
+
+                let transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: process.env.USER,
+                        pass: process.env.PASS
+                    }
+                });
+
+                let mailOptions = {
+                    from: process.env.USER,
+                    to: process.env.USER,
+                    subject: `✔ נקבע תור ל ${body.day}/${body.month}/${body.year} - ${body.hour}`,
+                    html: `<div>
+                    <h4>${user.firstname} ${user.lastname}</h4>
+                    <p>
+                    ${user.phone} :פלאפון<br/>
+                    ${body.day}/${body.month}/${body.year} :תאריך <br/>
+                    ${body.hour} :שעה</p>
+                    </div>`,
+                }
+                transporter.sendMail(mailOptions)
+            }
+            else {
+                response.status(401).send('התור כבר אינו פנוי')
+            }
         }
     }
     catch {
