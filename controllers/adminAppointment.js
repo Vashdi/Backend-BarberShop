@@ -38,7 +38,7 @@ adminAppointmentRouter.get('/:year/:month/:day', async (request, response) => {
 adminAppointmentRouter.post('/', async (request, response) => {
     try {
         const token = getTokenFrom(request)
-        const decodedToken = jwt.verify(token, process.env.SECRET, (err) => err ? response.status(401).send('!נא התחבר מחדש לקביעת התור') : null);
+        const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש לקביעת התור') : data);
         const body = request.body;
         const isExistClient = await Appointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
         if (isExistClient.length === 0) {
@@ -64,7 +64,7 @@ adminAppointmentRouter.post('/', async (request, response) => {
 adminAppointmentRouter.post('/break', (request, response) => {
     try {
         const token = getTokenFrom(request)
-        const decodedToken = jwt.verify(token, process.env.SECRET, (err) => err ? response.status(401).send('!נא התחבר מחדש לקביעת הפסקה') : null);
+        const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש לקביעת הפסקה') : data);
         const body = request.body;
         body.array.every(async (hour) => {
             const isExistClient = await Appointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });

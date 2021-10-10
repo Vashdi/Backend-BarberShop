@@ -4,6 +4,7 @@ const Appointment = require('../models/Appointment')
 const adminAppointment = require('../models/AdminAppointment')
 const User = require('../models/User');
 const AdminAppointment = require('../models/AdminAppointment');
+const nodemailer = require('nodemailer');
 
 const getTokenFrom = request => {
     const authorization = request.get('authorization')
@@ -48,21 +49,20 @@ appointmentRouter.get('/day/:day', async (request, response) => {
 appointmentRouter.delete('/:id', async (request, response) => {
     try {
         const token = getTokenFrom(request)
-        const decodedToken = jwt.verify(token, process.env.SECRET, (err) => err ? response.status(401).send('!נא התחבר מחדש למחיקת התור') : null);
+        const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש למחיקת התור') : data);
         const id = request.params.id;
         const resp = await Appointment.findByIdAndDelete(id);
         response.json(resp);
     } catch {
         response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
     }
-
 })
 
 appointmentRouter.post('/', async (request, response, next) => {
     const body = request.body
     try {
         const token = getTokenFrom(request)
-        const decodedToken = jwt.verify(token, process.env.SECRET, (err) => err ? response.status(401).send('!נא התחבר מחדש לקביעת התור') : null);
+        const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש לקביעת התור') : data);
         const user = await User.findById(decodedToken.id)
         const isExistClient = await Appointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
         const isExistAdmin = await AdminAppointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
@@ -77,6 +77,32 @@ appointmentRouter.post('/', async (request, response, next) => {
             const savedAppointment = await appointment.save()
             user.appointments = user.appointments.concat(savedAppointment._id)
             await user.save()
+
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.USER,
+                    pass: process.env.PASS
+                }
+            });
+
+            let mailOptions = {
+                from: process.env.USER,
+                to: process.env.USER,
+                subject: `נקבע תור ל ${body.day}/${body.month}/${body.year} - ${body.hour}`,
+                html: `<p>
+                שם: ${user.firstname} ${user.lastname}<br/>
+                ${user.phone} :פלאפון<br/>
+                ${body.day}/${body.month}/${body.year} :תאריך <br/>
+                ${body.hour} :שעה</p>`,
+            }
+
+            transporter.sendMail(mailOptions, function (err, data) {
+                if (err)
+                    console.log("ERROR");
+                else
+                    console.log("EMAIL SENT");
+            })
             response.json(savedAppointment)
         }
         else {
@@ -92,7 +118,7 @@ appointmentRouter.post('/admin', async (request, response) => {
     const body = request.body
     try {
         const token = getTokenFrom(request)
-        const decodedToken = jwt.verify(token, process.env.SECRET, (err) => err ? response.status(401).send('!נא התחבר מחדש לקביעת התור') : null)
+        const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש לקביעת התור') : data)
         const admin = await Admin.findById(decodedToken.id)
         const appointment = new Appointment({
             year: body.year,

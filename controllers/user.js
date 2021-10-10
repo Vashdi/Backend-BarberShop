@@ -47,7 +47,7 @@ usersRouter.delete('/:id', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
   try {
     const token = getTokenFrom(request)
-    const decodedToken = jwt.verify(token, process.env.SECRET, (err) => err ? response.status(401).send('!נא התחבר מחדש להוספת המשתמש') : null);
+    const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש להוספת המשתמש') : data);
     const body = request.body
     const user = new User({
       firstname: body.firstname,
