@@ -50,6 +50,7 @@ adminAppointmentRouter.post('/', async (request, response) => {
                 day: body.day,
                 hour: body.hour,
             })
+            console.log(newAdminAppointment);
             const savedAppointment = await newAdminAppointment.save()
             response.json(savedAppointment)
         }
@@ -61,35 +62,34 @@ adminAppointmentRouter.post('/', async (request, response) => {
     }
 })
 
-adminAppointmentRouter.post('/break', (request, response) => {
+adminAppointmentRouter.post('/break', async (request, response) => {
     try {
-        const token = getTokenFrom(request)
-        const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש לקביעת הפסקה') : data);
+        let isExistClient = [];
         const body = request.body;
-        body.array.every(async (hour) => {
-            const isExistClient = await Appointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
+        for (let i = 0; i < body.hours.length; i++) {
+            isExistClient = await Appointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hours[i] });
             if (isExistClient.length > 0)
-                return false;
-        });
+                break;
+        }
         if (isExistClient.length === 0) {
-            body.array.map(async (hour) => {
+            for (let i = 0; i < body.hours.length; i++) {
                 const newAdminAppointment = new adminAppointment({
                     firstName: "הפסקה-",
                     lastName: body.cause,
                     year: body.year,
                     month: body.month,
                     day: body.day,
-                    hour: hour,
+                    hour: body.hours[i],
                 })
                 await newAdminAppointment.save()
-            })
+            }
             response.json("worked");
         }
         else {
             response.status(401).send('אחד התורים נתפס על ידי לקוח');
         }
-    } catch {
-        response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
+    } catch (error) {
+        response.status(404).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
     }
 })
 

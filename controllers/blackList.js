@@ -28,7 +28,7 @@ blackListRouter.get('/:phone', async (request, response) => {
 
 blackListRouter.post('/', async (request, response) => {
     try {
-        const token = getTokenFrom(request)
+        const token = request.headers.authorization;
         const decodedToken = jwt.verify(token, process.env.SECRET, (err) => err ? response.status(401).send('!נא התחבר מחדש לחסימת המשתמש') : null);
         const body = request.body;
         const newBlackListUser = new BlackList({

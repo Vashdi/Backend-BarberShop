@@ -3,8 +3,12 @@ const strictRouter = require('express').Router()
 const Strict = require('../models/Strict')
 
 strictRouter.get('/', async (request, response) => {
-    const stricts = await Strict.find({})
-    response.json(stricts)
+    try {
+        const stricts = await Strict.find({});
+        response.json(stricts)
+    } catch (error) {
+        response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
+    }
 })
 
 strictRouter.post('/', async (request, response) => {
