@@ -48,6 +48,9 @@ usersRouter.post('/', async (request, response) => {
   try {
     const token = getTokenFrom(request)
     const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש להוספת המשתמש') : data);
+    if (!decodedToken) {
+      return;
+    }
     const body = request.body
     const user = new User({
       firstname: body.firstname,

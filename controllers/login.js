@@ -10,6 +10,7 @@ loginRouter.post('/', async (request, response) => {
         const passwordCorrect = user === null ? false : await bcrypt.compare(body.password, user.passwordHash)
         if (!(user && passwordCorrect)) {
             response.status(401).send('מספר הפלאפון או הסיסמה לא נכונים');
+            return;
         }
         const userForToken = {
             phone: user.phone,

@@ -10,15 +10,7 @@ app.use(cors())
 
 const url = process.env.MONGODB_URI;
 
-console.log('connecting to', url)
-
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
-  .then(result => {
-    console.log('connected to MongoDB')
-  })
-  .catch((error) => {
-    console.log('error connecting to MongoDB:', error.message)
-  })
 
 const adminLoginRouter = require('./controllers/adminLogin')
 const adminRegisterRouter = require('./controllers/adminRegister')
@@ -73,6 +65,4 @@ const errorHandler = (error, request, response, next) => {
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+app.listen(PORT)

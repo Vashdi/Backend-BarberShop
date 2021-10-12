@@ -10,6 +10,7 @@ adminRouter.post('/', async (request, response) => {
         const passwordCorrect = admin === null ? false : await bcrypt.compare(body.password, admin.passwordHash)
         if (!(admin && passwordCorrect)) {
             response.status(401).send('מספר הפלאפון או הסיסמה לא נכונים');
+            return;
         }
         const adminForToken = {
             phone: admin.phone,

@@ -39,6 +39,9 @@ adminAppointmentRouter.post('/', async (request, response) => {
     try {
         const token = getTokenFrom(request)
         const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש לקביעת התור') : data);
+        if (!decodedToken) {
+            return;
+        }
         const body = request.body;
         const isExistClient = await Appointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
         if (isExistClient.length === 0) {
@@ -50,7 +53,6 @@ adminAppointmentRouter.post('/', async (request, response) => {
                 day: body.day,
                 hour: body.hour,
             })
-            console.log(newAdminAppointment);
             const savedAppointment = await newAdminAppointment.save()
             response.json(savedAppointment)
         }

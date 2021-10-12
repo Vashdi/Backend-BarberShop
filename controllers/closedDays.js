@@ -27,7 +27,6 @@ closedDaysRouter.post('/', async (request, response) => {
         const newClosedDays = new closedDays({
             date: body.date
         })
-        console.log(newClosedDays);
         const savedClosedDay = await newClosedDays.save()
         response.json(savedClosedDay)
     } catch {

@@ -11,27 +11,35 @@ registerRouter.post('/', async (request, response) => {
         const dbUser = await User.findOne({ phone: body.phone })
         if (dbUser) {
             response.status(401).send('מספר הפלאפון כבר קיים במערכת');
+            return;
         }
         if (body.phone.length !== 10) {
             response.status(401).send('מספר הפלאפון חייב להיות באורך של 10 ספרות');
+            return;
         }
         if (!reg2.test(body.firstname)) {
             response.status(401).send('שם פרטי חייב להיות מורכב מאותיות בלבד');
+            return;
         }
         if (body.firstname.length < 2) {
             response.status(401).send('שם פרטי חייב להיות מורכב משתי אותיות לפחות');
+            return;
         }
         if (body.lastname.length < 2) {
             response.status(401).send('שם משפחה חייב להיות מורכב משתי אותיות לפחות');
+            return;
         }
         if (!reg2.test(body.lastname)) {
             response.status(401).send('שם משפחה חייב להיות מורכב מאותיות בלבד');
+            return;
         }
         if (!reg.test(body.phone)) {
             response.status(401).send('מספר פלאפון חייב להיות מורכב מספרות בלבד');
+            return;
         }
         if (body.password.length < 6 || body.password.length > 25) {
             response.status(401).send('סיסמה חייבת להיות באורך 6 ספרות לפחות או 25 ספרות לכל היותר');
+            return;
         }
         const saltRounds = 10
         const passwordHash = await bcrypt.hash(body.password, saltRounds)

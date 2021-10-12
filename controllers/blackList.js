@@ -30,6 +30,9 @@ blackListRouter.post('/', async (request, response) => {
     try {
         const token = request.headers.authorization;
         const decodedToken = jwt.verify(token, process.env.SECRET, (err) => err ? response.status(401).send('!נא התחבר מחדש לחסימת המשתמש') : null);
+        if (!decodedToken) {
+            return;
+        }
         const body = request.body;
         const newBlackListUser = new BlackList({
             firstname: body.firstname,

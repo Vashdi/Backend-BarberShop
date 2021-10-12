@@ -50,6 +50,9 @@ appointmentRouter.delete('/:id', async (request, response) => {
     try {
         const token = getTokenFrom(request)
         const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש למחיקת התור') : data);
+        if (!decodedToken) {
+            return;
+        }
         const id = request.params.id;
         const body = await Appointment.findByIdAndDelete(id);
         const user = await User.findById(body.user)
@@ -74,12 +77,7 @@ appointmentRouter.delete('/:id', async (request, response) => {
             </div>`,
         }
 
-        await transporter.sendMail(mailOptions, function (err, data) {
-            if (err)
-                console.log("ERROR");
-            else
-                console.log("EMAIL SENT");
-        })
+        await transporter.sendMail(mailOptions)
         response.json(body);
     } catch {
         response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
@@ -91,6 +89,9 @@ appointmentRouter.post('/', async (request, response, next) => {
     try {
         const token = getTokenFrom(request)
         const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש לקביעת התור') : data);
+        if (!decodedToken) {
+            return;
+        }
         const user = await User.findById(decodedToken.id)
         const isExistClient = await Appointment.find({ year: body.year, month: body.month, day: body.day, hour: body.hour });
         const isExistAppInThatDay = await Appointment.find({ user: user.id, year: body.year, month: body.month, day: body.day });
@@ -148,6 +149,9 @@ appointmentRouter.post('/admin', async (request, response) => {
     try {
         const token = getTokenFrom(request)
         const decodedToken = jwt.verify(token, process.env.SECRET, (err, data) => err ? response.status(401).send('!נא התחבר מחדש לקביעת התור') : data)
+        if (!decodedToken) {
+            return;
+        }
         const admin = await Admin.findById(decodedToken.id)
         const appointment = new Appointment({
             year: body.year,
