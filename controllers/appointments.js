@@ -99,7 +99,7 @@ appointmentRouter.delete('/:id', async (request, response) => {
 
         const username = user.firstname + " " + user.lastname;
         var mail = {
-            from: 'snirbarbershopauth@gmail.com',
+            from: username,
             to: 'vashdi7002@gmail.com',
             subject: 'בוטל תור ❌',
             html: `<h3 dir='rtl'>${username}</h3>
@@ -144,7 +144,7 @@ appointmentRouter.post('/', async (request, response, next) => {
 
                 const username = user.firstname + " " + user.lastname;
                 var mail = {
-                    from: 'snirbarbershopauth@gmail.com',
+                    from: username,
                     to: 'vashdi7002@gmail.com',
                     subject: 'נקבע תור חדש ✔️',
                     html: `<h3 dir='rtl'>${username}</h3>
