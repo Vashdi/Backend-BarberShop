@@ -96,6 +96,30 @@ appointmentRouter.delete('/:id', async (request, response) => {
         const body = await Appointment.findByIdAndDelete(id);
         const user = await User.findById(body.user)
         response.json(body);
+
+        const username = user.firstname + " " + user.lastname;
+        var mail = {
+            from: 'snirbarbershopauth@gmail.com',
+            to: 'vashdi7002@gmail.com',
+            subject: 'בוטל תור ❌',
+            html: `<h3 dir='rtl'>${username}</h3>
+                    <p dir='rtl'>מספר פלאפון: ${user.phone}</p>
+                   <p dir='rtl'>תאריך ${body.day}/${body.month}/${body.year}</p>
+                   <p dir='rtl'>שעה ${body.hour}</p>`
+        }
+        transporter.sendMail(mail, (err, data) => {
+            console.log(data);
+            if (err) {
+                res.json({
+                    status: err
+                })
+            } else {
+                res.json({
+                    status: 'success'
+                })
+            }
+        })
+
     } catch {
         response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
     }
@@ -130,12 +154,25 @@ appointmentRouter.post('/', async (request, response, next) => {
 
                 const username = user.firstname + " " + user.lastname;
                 var mail = {
-                    from: username,
+                    from: 'snirbarbershopauth@gmail.com',
                     to: 'vashdi7002@gmail.com',
-                    subject: 'נקבע תור חדש',
-                    text: 'לשעה'
+                    subject: 'נקבע תור חדש ✔️',
+                    html: `<h3 dir='rtl'>${username}</h3>
+                           <p dir='rtl'>מספר פלאפון: ${user.phone}</p>
+                           <p dir='rtl'>תאריך ${body.day}/${body.month}/${body.year}</p>
+                           <p dir='rtl'>שעה ${body.hour}</p>`
                 }
                 transporter.sendMail(mail, (err, data) => {
+                    console.log(data);
+                    if (err) {
+                        res.json({
+                            status: err
+                        })
+                    } else {
+                        res.json({
+                            status: 'success'
+                        })
+                    }
                 })
 
                 response.json(savedAppointment)
