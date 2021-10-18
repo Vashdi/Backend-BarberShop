@@ -145,7 +145,7 @@ appointmentRouter.post('/', async (request, response, next) => {
                 const username = user.firstname + " " + user.lastname;
                 var mail = {
                     from: username,
-                    to: 'vashdi7002@gmail.com',
+                    to: '123snirmish@gmail.com',
                     subject: 'נקבע תור חדש ✔️',
                     html: `<h3 dir='rtl'>${username}</h3>
                            <p dir='rtl'>מספר פלאפון: ${user.phone}</p>
