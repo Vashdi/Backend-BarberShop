@@ -162,15 +162,6 @@ appointmentRouter.post('/', async (request, response, next) => {
                            <p dir='rtl'>שעה ${body.hour}</p>`
                 }
                 transporter.sendMail(mail, (err, data) => {
-                    if (err) {
-                        response.json({
-                            status: err
-                        })
-                    } else {
-                        resposne.json({
-                            status: 'success'
-                        })
-                    }
                 })
 
                 response.json(savedAppointment)
