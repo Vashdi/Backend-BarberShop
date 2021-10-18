@@ -1,9 +1,2 @@
-POST  https://snir-barbershop.herokuapp.com/adminRegister
+DELETE https://snir-barbershop.herokuapp.com/appointments/616d4283ab0f3000163fb6ad
 Content-Type: application/json
-
-{
-    "firstName": "שניר",
-    "lastName":"מישאלוף",
-    "phone": "0502341694",
-    "password": "snir2021"
-}

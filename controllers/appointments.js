@@ -56,28 +56,28 @@ appointmentRouter.delete('/:id', async (request, response) => {
         const id = request.params.id;
         const body = await Appointment.findByIdAndDelete(id);
         const user = await User.findById(body.user)
-        let transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.USER,
-                pass: process.env.PASS
-            }
-        });
+        // let transporter = nodemailer.createTransport({
+        //     service: 'gmail',
+        //     auth: {
+        //         user: process.env.USER,
+        //         pass: process.env.PASS
+        //     }
+        // });
 
-        let mailOptions = {
-            from: process.env.USER,
-            to: process.env.USER,
-            subject: `✖ בוטל תור ${body.day}/${body.month}/${body.year} - ${body.hour}`,
-            html: `<div>
-            <h4> ${user.firstname} ${user.lastname}</h4>
-            <p>
-            ${user.phone} :פלאפון<br/>
-            ${body.day}/${body.month}/${body.year} :תאריך <br/>
-            ${body.hour} :שעה</p>
-            </div>`,
-        }
+        // let mailOptions = {
+        //     from: process.env.USER,
+        //     to: process.env.USER,
+        //     subject: `✖ בוטל תור ${body.day}/${body.month}/${body.year} - ${body.hour}`,
+        //     html: `<div>
+        //     <h4> ${user.firstname} ${user.lastname}</h4>
+        //     <p>
+        //     ${user.phone} :פלאפון<br/>
+        //     ${body.day}/${body.month}/${body.year} :תאריך <br/>
+        //     ${body.hour} :שעה</p>
+        //     </div>`,
+        // }
 
-        await transporter.sendMail(mailOptions)
+        // await transporter.sendMail(mailOptions)
         response.json(body);
     } catch {
         response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
