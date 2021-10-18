@@ -127,7 +127,6 @@ appointmentRouter.post('/', async (request, response, next) => {
                 const savedAppointment = await appointment.save()
                 user.appointments = user.appointments.concat(savedAppointment._id)
                 await user.save()
-                response.json(savedAppointment)
 
                 const username = user.firstname + " " + user.lastname;
                 var mail = {
@@ -136,18 +135,12 @@ appointmentRouter.post('/', async (request, response, next) => {
                     subject: 'נקבע תור חדש',
                     text: 'לשעה'
                 }
-
                 transporter.sendMail(mail, (err, data) => {
-                    if (err) {
-                        response.json({
-                            status: err
-                        })
-                    } else {
-                        response.json({
-                            status: 'success'
-                        })
-                    }
                 })
+
+                response.json(savedAppointment)
+
+
             }
             else {
                 response.status(401).send('התור כבר אינו פנוי')
