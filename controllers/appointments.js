@@ -45,8 +45,6 @@ transporter.verify((error, success) => {
     }
 });
 
-
-
 const getTokenFrom = request => {
     const authorization = request.get('authorization')
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
@@ -141,11 +139,11 @@ appointmentRouter.post('/', async (request, response, next) => {
 
                 transporter.sendMail(mail, (err, data) => {
                     if (err) {
-                        res.json({
+                        response.json({
                             status: err
                         })
                     } else {
-                        res.json({
+                        response.json({
                             status: 'success'
                         })
                     }
