@@ -100,7 +100,7 @@ appointmentRouter.delete('/:id', async (request, response) => {
         const username = user.firstname + " " + user.lastname;
         var mail = {
             from: username,
-            to: 'vashdi7002@gmail.com',
+            to: '123snirmish@gmail.com',
             subject: 'בוטל תור ❌',
             html: `<h3 dir='rtl'>${username}</h3>
                     <p dir='rtl'>מספר פלאפון: ${user.phone}</p>
