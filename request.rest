@@ -1,2 +1,9 @@
-DELETE  http://localhost:3001/closedDays/Thu%20Oct%2021%202021%2000:00:00%20GMT+0300%20(Israel%20Daylight%20Time
+POST  https://snir-barbershop.herokuapp.com/adminRegister
 Content-Type: application/json
+
+{
+    "firstName": "שניר",
+    "lastName":"מישאלוף",
+    "phone": "0502341694",
+    "password": "snir2021"
+}
