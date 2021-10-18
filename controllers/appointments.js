@@ -5,6 +5,47 @@ const adminAppointment = require('../models/AdminAppointment')
 const User = require('../models/User');
 const AdminAppointment = require('../models/AdminAppointment');
 const nodemailer = require('nodemailer');
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
+
+const oauth2Client = new OAuth2(
+    process.env.CLIENTID,
+    process.env.CLIENTSECRET,
+    "https://developers.google.com/oauthplayground" // Redirect URL
+);
+
+oauth2Client.setCredentials({
+    refresh_token: process.env.REFRESHTOKEN
+});
+const accessToken = oauth2Client.getAccessToken()
+
+var transport = {
+    host: 'smtp.gmail.com',
+    port: 465,
+    auth: {
+        type: 'OAuth2',
+        user: process.env.USER,
+        clientId: process.env.CLIENTID,
+        clientSecret: process.env.CLIENTSECRET,
+        refreshToken: process.env.REFRESHTOKEN,
+        accessToken: accessToken,
+    },
+    tls: {
+        rejectUnauthorized: false
+    }
+}
+
+var transporter = nodemailer.createTransport(transport)
+
+transporter.verify((error, success) => {
+    if (error) {
+        console.log(error);
+    } else {
+        console.log('Server is ready to take messages');
+    }
+});
+
+
 
 const getTokenFrom = request => {
     const authorization = request.get('authorization')
@@ -56,28 +97,6 @@ appointmentRouter.delete('/:id', async (request, response) => {
         const id = request.params.id;
         const body = await Appointment.findByIdAndDelete(id);
         const user = await User.findById(body.user)
-        // let transporter = nodemailer.createTransport({
-        //     service: 'gmail',
-        //     auth: {
-        //         user: process.env.USER,
-        //         pass: process.env.PASS
-        //     }
-        // });
-
-        // let mailOptions = {
-        //     from: process.env.USER,
-        //     to: process.env.USER,
-        //     subject: `✖ בוטל תור ${body.day}/${body.month}/${body.year} - ${body.hour}`,
-        //     html: `<div>
-        //     <h4> ${user.firstname} ${user.lastname}</h4>
-        //     <p>
-        //     ${user.phone} :פלאפון<br/>
-        //     ${body.day}/${body.month}/${body.year} :תאריך <br/>
-        //     ${body.hour} :שעה</p>
-        //     </div>`,
-        // }
-
-        // await transporter.sendMail(mailOptions)
         response.json(body);
     } catch {
         response.status(401).send('אופס, משהו השתבש אנא נסה שנית או פנה למנהל המערכת');
@@ -112,27 +131,25 @@ appointmentRouter.post('/', async (request, response, next) => {
                 await user.save()
                 response.json(savedAppointment)
 
-                let transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                        user: process.env.USER,
-                        pass: process.env.PASS
-                    }
-                });
-
-                let mailOptions = {
-                    from: process.env.USER,
-                    to: process.env.USER,
-                    subject: `✔ נקבע תור ל ${body.day}/${body.month}/${body.year} - ${body.hour}`,
-                    html: `<div>
-                    <h4>${user.firstname} ${user.lastname}</h4>
-                    <p>
-                    ${user.phone} :פלאפון<br/>
-                    ${body.day}/${body.month}/${body.year} :תאריך <br/>
-                    ${body.hour} :שעה</p>
-                    </div>`,
+                const username = user.firstname + " " + user.lastname;
+                var mail = {
+                    from: username,
+                    to: 'vashdi7002@gmail.com',
+                    subject: 'נקבע תור חדש',
+                    text: 'לשעה'
                 }
-                transporter.sendMail(mailOptions)
+
+                transporter.sendMail(mail, (err, data) => {
+                    if (err) {
+                        res.json({
+                            status: err
+                        })
+                    } else {
+                        res.json({
+                            status: 'success'
+                        })
+                    }
+                })
             }
             else {
                 response.status(401).send('התור כבר אינו פנוי')
