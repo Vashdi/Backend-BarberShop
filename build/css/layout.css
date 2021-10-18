@@ -1,32 +1,4 @@
-/*
-=====================================================================
-*   Ceevee v1.0 Layout Stylesheet
-*   url: styleshout.com
-*   03-18-2014
-=====================================================================
-
-   TOC:
-   a. General Styles
-   b. Header Styles
-   c. About Section
-   d. Gallery Section
-   e. MakeAppointment Section
-   f. Call To Action Section
-   g. Testimonials Section
-   h. Contact Section
-   i. Footer
-
-===================================================================== */
-
-/* ------------------------------------------------------------------ */
-/* a. General Styles
-/* ------------------------------------------------------------------ */
-
 body { background: #0f0f0f; }
-
-/* ------------------------------------------------------------------ */
-/* b. Header Styles
-/* ------------------------------------------------------------------ */
 
 header {
    position: relative;
@@ -49,66 +21,6 @@ header .banner {
    z-index: 300000 !important;
 }
 
-
-/* header .banner-text { width: 100%; }
-header .banner-text h1 {
-   font: 90px/1.1em 'opensans-bold', sans-serif;
-   color: #fff;
-   letter-spacing: -2px;
-   margin: 0 auto 18px auto;
-   text-shadow: 0px 1px 3px rgba(0, 0, 0, .8);
-   animation: mymove 3s;
-}
-@keyframes mymove {
-   from { left: -1000px;}
-   to {left: 360px;}
- }
- @media screen and ( max-width: 960px){
-   @keyframes mymove {
-      from { left: -1000px;}
-      to {left: 60px;}
-    }
- }
-header .banner-text h1:hover { color: #11ABB0; }
-
-header .banner-text h3 {
-   font: 18px/1.9em 'librebaskerville-regular', serif;
-   color: #A8A8A8;
-   margin: 0 auto;
-   width: 70%;
-   text-shadow: 0px 1px 2px rgba(0, 0, 0, .5);
-}
-header .banner-text h3 span,
-header .banner-text h3 a {
-   color: #fff;
-}
-header .banner-text hr {
-   position: absolute;
-   top: 370px;
-   left: 420px;
-   width: 40%;
-   margin: 18px auto 24px auto;
-   border-color: #2F2D2E;
-   border-color: rgba(150, 150, 150, .1);
-   animation: animatedHr 3s;
-}
-@keyframes animatedHr {
-   from { transform: scale(0.01);}
-   to {transform: scale(1);}
- }
-@media screen and ( max-width: 960px){
-   header .banner-text hr {
-      position: absolute;
-      top: 370px;
-      left: 50px;
-      width: 20%;
-      margin: 18px auto 24px auto;
-      border-color: #2F2D2E;
-      border-color: rgba(150, 150, 150, .1);
-   }
-} */
-
-/* header social links */
 header .social {
    margin: 24px 0;
    padding: 0;
@@ -146,8 +58,6 @@ header .scrolldown a {
 }
 header .scrolldown a:hover { color: #F06000; }
 
-/* primary navigation
---------------------------------------------------------------------- */
 #nav-wrap ul, #nav-wrap li, #nav-wrap a {
 	 margin: 0;
 	 padding: 0;
@@ -220,58 +130,6 @@ ul#nav li.current a { color: #F06000; }
    overflow: hidden;
 }
 
-/* @media screen and ( max-width: 960px){
-   #about {
-      background: #2B2B2B;
-      padding-top: 20px;
-      padding-bottom: 70px;
-      overflow: hidden;
-      text-align: left;
-   }
-} */
-
-/* #about a, #about a:visited  { color: #fff; }
-#about a:hover, #about a:focus { color: rgb(212, 17, 11); }
-
-#about h2 {
-   font: 22px/30px 'opensans-bold', sans-serif;
-   color: #fff;
-   margin-bottom: 12px;
-}
-#about p {
-   line-height: 30px;
-   color: #7A7A7A;
-}
-#about .profile-pic {
-   position: relative;
-   width: 170px;
-   height: 170px;
-   border-radius: 100%;
-}
-#about .contact-details { width: 41.66667%; }
-#about .download {
-   width: 58.33333%;
-   padding-top: 6px;
-}
-#about .main-col { padding-right: 5%; }
-#about .download .button {
-   margin-top: 6px;
-   background: #444;
-}
-#about .download .button:hover {
-   background: #fff;
-   color: #2B2B2B;
-}
-#about .download .button i {
-   margin-right: 15px;
-   font-size: 20px;
-}
- */
-
-/* ------------------------------------------------------------------ */
-/* d. Gallery Section
-/* ------------------------------------------------------------------ */
-
 #Gallery {
    background: rgb(22, 22, 22);
    padding-top: 20px;
@@ -297,81 +155,6 @@ ul#nav li.current a { color: #F06000; }
       text-align: left;
    }
 }
-/* 
-#Gallery a, #Gallery a:visited  { color: #11ABB0; }
-#Gallery a:hover, #Gallery a:focus { color: #313131; }
-
-#Gallery h1 {
-   font: 18px/24px 'opensans-bold', sans-serif;
-   text-transform: uppercase;
-   letter-spacing: 1px;
-}
-/* #Gallery h1 span {
-   border-bottom: 3px solid rgb(204, 56, 19);
-   padding-bottom: 6px;
-} */
-/* #Gallery h3 {
-   font: 25px/30px 'opensans-bold', sans-serif;
-}
-#Gallery h5 {
-   color: #313131;
-   font-family: 'opensans-bold', sans-serif;
-   font-weight: normal;
-   font-size: 18px;
-   line-height: 30px;
-   margin-block-start: 0.5em;
-   margin-block-end: 0.5em;
-   margin-inline-start: 0px;
-   margin-inline-end: 0px;
-}
-
-#Gallery .feature-item {
-   text-align: center;
-   margin-top: 2.5em;
-   padding-left: 2em;
-   padding-right: 2em;
-}
-#Gallery .skills {
-   max-width: 65%;
-}
-#Gallery .bgrid-quarters 
-[class*="column"]{
-   max-width: 65%;
-}
-#Gallery .header-col { padding-top: 9px; }
-#Gallery .main-col { padding-right: 10%; }
-
-.education, .work , .skill ,.technology{
-   margin-bottom: 48px;
-   padding-bottom: 24px;
-   border-bottom: 1px solid #E8E8E8;
-}
-#Gallery .info {
-   font: 16px/24px 'librebaskerville-italic', serif;
-   color: #6E7881;
-   margin-bottom: 18px;
-   margin-top: 9px;
-} */ */
-/* #Gallery .info span {
-   margin-right: 5px;
-   margin-left: 5px;
-} */
-/* #Gallery .date {
-   font: 15px/24px 'opensans-regular', sans-serif;
-   margin-top: 6px;
-}
-
-#Gallery div.description{
-   margin: 0 0 30px 0;
-   font-size: 100%;
-   display: block;
-   box-sizing: border-box;
-} */
-
-/*----------------------------------------------*/
-/*	Skill Bars
-/*----------------------------------------------*/
-
 .bars {
 	width: 95%;
 	float: left;
@@ -412,11 +195,6 @@ ul#nav li.current a { color: #F06000; }
    border-radius: 3px 0 0 3px;
 }
 
-
-/* ------------------------------------------------------------------ */
-/* e. MakeAppointment Section
-/* ------------------------------------------------------------------ */
-
 #price {
    display: flex;
    flex-direction: column;
@@ -447,16 +225,7 @@ ul#nav li.current a { color: #F06000; }
     text-align: center;
     overflow: hidden;
 } 
-/* @media screen and ( max-width: 960px){
-   #MakeAppointment {
-      background: #2B2B2B;
-      margin-left: 0%;
-      padding-top: 10px;
-      padding-bottom: 0px;
-      min-height: 530px;
-      width: 100%;
-   } 
-} */
+
 #MakeAppointment h1 {
    font: 30px/20px 'opensans-semibold', sans-serif;
    text-transform: uppercase;
@@ -475,178 +244,6 @@ ul#nav li.current a { color: #F06000; }
    color: #F06000;
    margin-left: 500px;
 }
-
-/* MakeAppointment Content */
-/* #MakeAppointment-wrapper .columns { margin-bottom: 36px; }
-.MakeAppointment-item .item-wrap {
-   background: #fff;
-   overflow: hidden;
-   position: relative;
-
-   -webkit-transition: all 0.3s ease-in-out;
-	-moz-transition: all 0.3s ease-in-out;
-	-o-transition: all 0.3s ease-in-out;
-	-ms-transition: all 0.3s ease-in-out;
-	transition: all 0.3s ease-in-out;
-}
-#MakeAppointment h3 span {
-   border-bottom: 3px solid rgb(204, 56, 19);
-}
-#MakeAppointment .feature-item {
-   text-align: center;
-   margin-top: 2.5em;
-   margin-bottom: 2em;
-   padding-left: 2em;
-   padding-right: 2em;
-}
-#MakeAppointment .bgrid-quarters {
-   margin-left: 3em;
-   margin-right: 3em;
-}
-
-.MakeAppointment-item .item-wrap a {
-   display: block;
-   cursor: pointer;
-}
-
-/* overlay */
-/* .MakeAppointment-item .item-wrap .overlay {
-   position: absolute;
-   left: 0;
-   top: 0;
-   width: 100%;
-   height: 100%;
-
-	opacity: 0;
-	-moz-opacity: 0;
-	filter:alpha(opacity=0);
-
-   -webkit-transition: opacity 0.3s ease-in-out;
-	-moz-transition: opacity 0.3s ease-in-out;
-	-o-transition: opacity 0.3s ease-in-out;
-	transition: opacity 0.3s ease-in-out;
-
-   background: url(../images/overlay-bg.png) repeat;
-}
-.MakeAppointment-item .item-wrap .link-icon {
-   display: block;
-   color: #fff;
-   height: 30px;
-   width: 30px;
-   font-size: 18px;
-   line-height: 30px;
-   text-align: center;
-
-   opacity: 0;
-	-moz-opacity: 0;
-	filter:alpha(opacity=0);
-
-   -webkit-transition: opacity 0.3s ease-in-out;
-	-moz-transition: opacity 0.3s ease-in-out;
-	-o-transition: opacity 0.3s ease-in-out;
-	transition: opacity 0.3s ease-in-out;
-
-   position: absolute;
-   top: 50%;
-   left: 50%;
-   margin-left: -15px;
-   margin-top: -15px;
-}
-.MakeAppointment-item .item-wrap img {
-   vertical-align: bottom;
-}
-.MakeAppointment-item .MakeAppointment-item-meta { padding: 18px }
-.MakeAppointment-item .MakeAppointment-item-meta h5 {
-   font: 14px/21px 'opensans-bold', sans-serif;
-   color: #fff;
-}
-.MakeAppointment-item .MakeAppointment-item-meta p {
-   font: 12px/18px 'opensans-light', sans-serif;
-   color: #c6c7c7;
-   margin-bottom: 0;
-} */
-
-/* on hover */
-/* .MakeAppointment-item:hover .overlay {
-	opacity: 1;
-	-moz-opacity: 1;
-	filter:alpha(opacity=100);
-}
-.MakeAppointment-item:hover .link-icon {
-   opacity: 1;
-	-moz-opacity: 1;
-	filter:alpha(opacity=100);
-}  */
-
-/* popup modal */
-/* .popup-modal { */
-	/* max-width: 550px;
-	background: #fff;
-	position: relative;
-	margin: 0 auto;
-}
-.popup-modal .description-box { padding: 12px 36px 18px 36px; }
-.popup-modal .description-box h4 {
-   font: 15px/24px 'opensans-bold', sans-serif;
-	margin-bottom: 12px;
-   color: #111;
-}
-.popup-modal .description-box p {
-	font: 14px/24px 'opensans-regular', sans-serif;
-   color: #A1A1A1;
-   margin-bottom: 12px;
-}
-.popup-modal .description-box .categories {
-   font: 11px/21px 'opensans-light', sans-serif;
-   color: #A1A1A1;
-   text-transform: uppercase;
-   letter-spacing: 2px;
-   display: block;
-   text-align: left;
-}
-.popup-modal .description-box .categories i {
-   margin-right: 8px;
-}
-.popup-modal .link-box {
-   padding: 18px 36px;
-   background: #111;
-   text-align: left;
-}
-.popup-modal .link-box a {
-   color: #fff;
-	font: 11px/21px 'opensans-bold', sans-serif;
-	text-transform: uppercase;
-   letter-spacing: 3px;
-   cursor: pointer;
-}
-.popup-modal a:hover {	color: #00CCCC; }
-.popup-modal a.popup-modal-dismiss { margin-left: 24px; }
-
-
-/* fadein/fadeout effect for modal popup
-/* ------------------------------------------------------------------ */
-
-/* content at start */
-/* .mfp-fade.mfp-wrap .mfp-content .popup-modal {
-   opacity: 0;
-   -webkit-transition: all 200ms ease-in-out;
-	-moz-transition: all 200ms ease-in-out;
-	-o-transition: all 200ms ease-in-out;
-	-ms-transition: all 200ms ease-in-out;
-   transition: all 200ms ease-in-out;
-}
-/* content fadein */
-/* .mfp-fade.mfp-wrap.mfp-ready .mfp-content .popup-modal {
-   opacity: 1;
-} */
-/* content fadeout */
-/* .mfp-fade.mfp-wrap.mfp-removing .mfp-content .popup-modal {
-   opacity: 0;
-}  */
-
-/* ------------------------------------------------------------------ */
-/* f. Call To Action Section
-/* ------------------------------------------------------------------ */
 
 #call-to-action {
    background: #212121;
@@ -685,12 +282,7 @@ ul#nav li.current a { color: #F06000; }
    color: #636363;
    font-size: 17px;
 }
-/*#
-call-to-action .button {
-	color:#fff;
-   background: #0D0D0D;
-}
-*/
+
 #call-to-action .button:hover,
 #call-to-action .button:active {
    background: #FFFFFF;
@@ -700,10 +292,6 @@ call-to-action .button {
 	font-family: 'opensans-semibold', sans-serif;
 	color: #D8D8D8;
 }
-
-/* ------------------------------------------------------------------
-/* g. Testimonials
-/* ------------------------------------------------------------------ */
 
 #testimonials {
    background: #1F1F1F url(../images/testimonials.jpg) no-repeat center center;
@@ -915,23 +503,6 @@ footer .copyright li:before {
 footer .copyright  li:first-child:before {
     display: none;
 }
-
-/* social links */
-/* #footer .social-links {
-   margin: 18px 0 30px 0;
-   padding: 0;
-   font-size: 30px;
-}
-#footer .social-links li {
-    display: inline-block;
-    margin: 0;
-    padding: 0;
-    margin-left: 42px;
-    color: #F06000;
-}
-
-#footer .social-links li:first-child { margin-left: 0; } */
-
 
 /* Go To Top Button */
 #footer .go-top {
