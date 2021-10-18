@@ -108,13 +108,12 @@ appointmentRouter.delete('/:id', async (request, response) => {
                    <p dir='rtl'>שעה ${body.hour}</p>`
         }
         transporter.sendMail(mail, (err, data) => {
-            console.log(data);
             if (err) {
-                res.json({
+                response.json({
                     status: err
                 })
             } else {
-                res.json({
+                response.json({
                     status: 'success'
                 })
             }
@@ -163,13 +162,12 @@ appointmentRouter.post('/', async (request, response, next) => {
                            <p dir='rtl'>שעה ${body.hour}</p>`
                 }
                 transporter.sendMail(mail, (err, data) => {
-                    console.log(data);
                     if (err) {
-                        res.json({
+                        response.json({
                             status: err
                         })
                     } else {
-                        res.json({
+                        resposne.json({
                             status: 'success'
                         })
                     }
