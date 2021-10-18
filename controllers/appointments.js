@@ -108,15 +108,6 @@ appointmentRouter.delete('/:id', async (request, response) => {
                    <p dir='rtl'>שעה ${body.hour}</p>`
         }
         transporter.sendMail(mail, (err, data) => {
-            if (err) {
-                response.json({
-                    status: err
-                })
-            } else {
-                response.json({
-                    status: 'success'
-                })
-            }
         })
 
     } catch {
