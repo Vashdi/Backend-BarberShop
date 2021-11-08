@@ -11,7 +11,7 @@ const OAuth2 = google.auth.OAuth2;
 const oauth2Client = new OAuth2(
     process.env.CLIENTID,
     process.env.CLIENTSECRET,
-    "https://developers.google.com/oauthplayground" // Redirect URL
+    "https://developers.google.com/oauthplayground"
 );
 
 oauth2Client.setCredentials({
