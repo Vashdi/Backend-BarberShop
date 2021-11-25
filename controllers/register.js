@@ -37,18 +37,13 @@ registerRouter.post('/', async (request, response) => {
             response.status(401).send('מספר פלאפון חייב להיות מורכב מספרות בלבד');
             return;
         }
-        if (body.password.length < 6 || body.password.length > 25) {
-            response.status(401).send('סיסמה חייבת להיות באורך 6 ספרות לפחות או 25 ספרות לכל היותר');
-            return;
-        }
-        const saltRounds = 10
-        const passwordHash = await bcrypt.hash(body.password, saltRounds)
+
         const user = new User({
             firstname: body.firstname,
             lastname: body.lastname,
-            phone: body.phone,
-            passwordHash
+            phone: body.phone
         })
+
         const savedUser = await user.save()
         const userForToken = {
             phone: body.phone,

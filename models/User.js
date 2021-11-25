@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true
   },
-  passwordHash: String,
   appointments: [
     {
       type: mongoose.Schema.Types.ObjectId,
