@@ -7,9 +7,9 @@ loginRouter.post('/', async (request, response) => {
     try {
         const body = request.body
         const user = await User.findOne({ phone: body.phone })
-        const passwordCorrect = user === null ? false : await bcrypt.compare(body.password, user.passwordHash)
-        if (!(user && passwordCorrect)) {
-            response.status(401).send('מספר הפלאפון או הסיסמה לא נכונים');
+        const firstNameCorrect = user === null ? false : body.firstname === user.firstname;
+        if (!(user && firstNameCorrect)) {
+            response.status(401).send('מספר הפלאפון או השם פרטי לא נכונים');
             return;
         }
         const userForToken = {
